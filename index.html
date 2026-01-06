@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator - SmartFinance</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-green: #22c55e;
+            --text-light: #f8fafc;
+            --border-color: #334155;
+        }
+
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; }
+        .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
+        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
+        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 14px; font-weight: 800; }
+        
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
+        .calc-box { border: 1px solid var(--border-color); padding: 25px; background: var(--card-bg); border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        
+        .row { display: flex; align-items: center; margin-bottom: 15px; }
+        .row label { width: 150px; font-size: 16px; color: #cbd5e1; font-weight: 800; }
+        
+        .input-field { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; background: white; color: black; outline: none; }
+        .result-group { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 18px; }
+        .res-val { font-weight: 900; color: var(--accent-green); }
+
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; opacity: 0.5; }
+        .tool-link { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--accent-green); padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 13px; font-weight: 800; }
+
+        footer { margin-top: 40px; border-top: 1px solid var(--border-color); padding: 20px 0; text-align: center; color: #94a3b8; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="top-header">
+    <h1>SmartFinance.io</h1>
+    <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect">
+        <option value="en">English</option>
+        <option value="uk">Українська</option>
+    </select>
+</div>
+
+<div class="container">
+    <div class="calc-box">
+        <div class="row">
+            <label id="lbl-bill">Bill Amount:</label>
+            <input type="number" id="bill" class="input-field" value="100" oninput="calculate()">
+        </div>
+        <div class="row">
+            <label id="lbl-tip">Tip (%):</label>
+            <input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()">
+        </div>
+        <div class="row">
+            <label id="lbl-people">People:</label>
+            <input type="number" id="people" class="input-field" value="1" oninput="calculate()">
+        </div>
+        
+        <div class="result-group">
+            <div class="res-row">
+                <span id="lbl-tip-total">Tip Amount:</span>
+                <span id="tipAmount" class="res-val">0.00</span>
+            </div>
+            <div class="res-row" style="font-size: 22px;">
+                <span id="lbl-total-person">Per Person:</span>
+                <span id="totalPerson" class="res-val">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <h3 style="text-align: center; font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 30px;">Other Tools</h3>
+    <div class="tools-grid">
+        <a href="#" class="tool-link">Unit Converter</a>
+        <a href="#" class="tool-link">VAT Calculator</a>
+        <a href="#" class="tool-link">Loan Calculator</a>
+        <a href="#" class="tool-link">Discount Calc</a>
+    </div>
+
+    <footer>
+        <p id="txt-footer">SmartFinance Tip Calculator — quick & fair.</p>
+    </footer>
+</div>
+
+<script>
+    const translations = {
+        en: {
+            bill: "Bill Amount:", tip: "Tip (%):", people: "People:",
+            tipTotal: "Tip Amount:", totalPerson: "Per Person:",
+            footer: "SmartFinance Tip Calculator — quick & fair."
+        },
+        uk: {
+            bill: "Сума чека:", tip: "Чайові (%):", people: "Людей:",
+            tipTotal: "Сума чайових:", totalPerson: "З кожного:",
+            footer: "SmartFinance — швидкий розрахунок чайових."
+        }
+    };
+
+    let curLang = localStorage.getItem('langTip') || 'en';
+
+    function changeLang(lang) {
+        curLang = lang;
+        localStorage.setItem('langTip', lang);
+        updateUI();
+    }
+
+    function updateUI() {
+        const t = translations[curLang];
+        document.getElementById('langSelect').value = curLang;
+        document.getElementById('lbl-bill').innerText = t.bill;
+        document.getElementById('lbl-tip').innerText = t.tip;
+        document.getElementById('lbl-people').innerText = t.people;
+        document.getElementById('lbl-tip-total').innerText = t.tipTotal;
+        document.getElementById('lbl-total-person').innerText = t.totalPerson;
+        document.getElementById('txt-footer').innerText = t.footer;
+        calculate();
+    }
+
+    function calculate() {
+        const bill = parseFloat(document.getElementById('bill').value) || 0;
+        const tipP = parseFloat(document.getElementById('tipPerc').value) || 0;
+        const ppl = parseInt(document.getElementById('people').value) || 1;
+        
+        const totalTip = bill * (tipP / 100);
+        const totalBill = bill + totalTip;
+        const perPerson = totalBill / (ppl > 0 ? ppl : 1);
+
+        document.getElementById('tipAmount').innerText = totalTip.toFixed(2);
+        document.getElementById('totalPerson').innerText = perPerson.toFixed(2);
+    }
+
+    updateUI();
+</script>
+</body>
+</html>
