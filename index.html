@@ -11,28 +11,33 @@
             --accent-green: #22c55e;
             --text-light: #f8fafc;
             --border-color: #334155;
+            --border-glow: rgba(255, 255, 255, 0.3);
         }
 
-        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; }
-        .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
-        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
-        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 14px; font-weight: 800; }
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); -webkit-font-smoothing: antialiased; color: var(--text-light); }
         
-        .container { max-width: 600px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .calc-box { border: 1px solid var(--border-color); padding: 25px; background: var(--card-bg); border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; color: white; border-bottom: 1px solid var(--border-color); }
+        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 0.5px; }
         
-        .row { display: flex; align-items: center; margin-bottom: 15px; }
-        .row label { width: 150px; font-size: 16px; color: #cbd5e1; font-weight: 800; }
+        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 800; }
+        .lang-switcher option { color: #333; }
         
-        .input-field { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; background: white; color: black; outline: none; }
-        .result-group { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-        .res-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 18px; }
-        .res-val { font-weight: 900; color: var(--accent-green); }
+        .container { max-width: 800px; margin: 0 auto; padding: 5px; background: var(--bg-dark); min-height: 100vh; box-sizing: border-box; }
+        
+        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin: 15px 0 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        
+        .row { display: flex; align-items: center; margin-bottom: 18px; }
+        .row label { width: 150px; font-size: 17px; color: #cbd5e1; font-weight: 900; line-height: 1.2; padding-right: 10px; }
+        
+        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; width: 100%; box-sizing: border-box; height: 48px; background: #fff; color: #000; }
+        .result-field { background: #f0fdf4 !important; color: #166534 !important; border-color: #22c55e !important; }
 
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; opacity: 0.5; }
-        .tool-link { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--accent-green); padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 13px; font-weight: 800; }
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .tool-link { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--accent-green); padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 13px; font-weight: 800; transition: 0.3s; }
+        .tool-link:hover { background: var(--accent-green); color: white; }
 
-        footer { margin-top: 40px; border-top: 1px solid var(--border-color); padding: 20px 0; text-align: center; color: #94a3b8; font-size: 13px; }
+        footer { border-top: 1px solid var(--border-color); padding: 25px 15px; text-align: center; font-size: 13px; color: #94a3b8; }
+        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body>
@@ -42,60 +47,73 @@
     <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect">
         <option value="en">English</option>
         <option value="uk">Українська</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
     </select>
 </div>
 
 <div class="container">
-    <div class="calc-box">
-        <div class="row">
-            <label id="lbl-bill">Bill Amount:</label>
-            <input type="number" id="bill" class="input-field" value="100" oninput="calculate()">
-        </div>
-        <div class="row">
-            <label id="lbl-tip">Tip (%):</label>
-            <input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()">
-        </div>
-        <div class="row">
-            <label id="lbl-people">People:</label>
-            <input type="number" id="people" class="input-field" value="1" oninput="calculate()">
-        </div>
+    <div class="converter-box">
+        <div class="row"><label id="lbl-bill">Bill Amount:</label><input type="number" id="bill" class="input-field" value="100" oninput="calculate()"></div>
+        <div class="row"><label id="lbl-tip">Tip (%):</label><input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()"></div>
+        <div class="row"><label id="lbl-people">People:</label><input type="number" id="people" class="input-field" value="1" oninput="calculate()"></div>
         
-        <div class="result-group">
-            <div class="res-row">
-                <span id="lbl-tip-total">Tip Amount:</span>
-                <span id="tipAmount" class="res-val">0.00</span>
-            </div>
-            <div class="res-row" style="font-size: 22px;">
-                <span id="lbl-total-person">Per Person:</span>
-                <span id="totalPerson" class="res-val">0.00</span>
-            </div>
+        <div class="row" style="margin-top:25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <label id="lbl-tip-total" style="color: var(--accent-green);">Tip Amount:</label>
+            <input type="text" id="tipAmount" class="input-field result-field" readonly>
+        </div>
+        <div class="row">
+            <label id="lbl-total-person">Per Person:</label>
+            <input type="text" id="totalPerson" class="input-field result-field" readonly style="color: #166534 !important; background: #f0fdf4 !important;">
         </div>
     </div>
 
-    <h3 style="text-align: center; font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 30px;">Other Tools</h3>
+    <h3 style="text-align: center; font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 30px;" id="txt-other">Other Tools</h3>
     <div class="tools-grid">
-        <a href="#" class="tool-link">Unit Converter</a>
-        <a href="#" class="tool-link">VAT Calculator</a>
-        <a href="#" class="tool-link">Loan Calculator</a>
-        <a href="#" class="tool-link">Discount Calc</a>
+        <a href="#" class="tool-link" id="lnk-unit">Unit Converter</a>
+        <a href="#" class="tool-link" id="lnk-perc">Percentage Calc</a>
+        <a href="#" class="tool-link" id="lnk-vat">VAT Calculator</a>
+        <a href="#" class="tool-link" id="lnk-loan">Loan Calculator</a>
+        <a href="#" class="tool-link" id="lnk-disc">Discount Calc</a>
+        <a href="#" class="tool-link" id="lnk-bmi">BMI Calculator</a>
+        <a href="#" class="tool-link" id="lnk-cur">Currency Converter</a>
     </div>
-
-    <footer>
-        <p id="txt-footer">SmartFinance Tip Calculator — quick & fair.</p>
-    </footer>
 </div>
+
+<footer>
+    <div class="footer-info-block" id="footer-text"></div>
+    <p>© 2025 SmartFinance.io</p>
+</footer>
 
 <script>
     const translations = {
         en: {
             bill: "Bill Amount:", tip: "Tip (%):", people: "People:",
             tipTotal: "Tip Amount:", totalPerson: "Per Person:",
-            footer: "SmartFinance Tip Calculator — quick & fair."
+            other: "Other Tools", footer: "SmartFinance Tip Calculator — quick and fair way to split the bill.",
+            unit: "Unit Converter", perc: "Percentage Calc", vat: "VAT Calculator", 
+            loan: "Loan Calculator", disc: "Discount Calc", bmi: "BMI Calculator", cur: "Currency Converter"
         },
         uk: {
             bill: "Сума чека:", tip: "Чайові (%):", people: "Людей:",
             tipTotal: "Сума чайових:", totalPerson: "З кожного:",
-            footer: "SmartFinance — швидкий розрахунок чайових."
+            other: "Інші інструменти", footer: "SmartFinance — швидкий та чесний розрахунок чайових.",
+            unit: "Конвертер", perc: "Відсотки", vat: "Калькулятор ПДВ", 
+            loan: "Кредити", disc: "Знижки", bmi: "Індекс маси тіла", cur: "Курси валют"
+        },
+        es: {
+            bill: "Monto de la cuenta:", tip: "Propina (%):", people: "Personas:",
+            tipTotal: "Monto de propina:", totalPerson: "Por persona:",
+            other: "Otras herramientas", footer: "Calculadora de propinas: rápida y justa.",
+            unit: "Convertidor", perc: "Porcentajes", vat: "Calculadora IVA", 
+            loan: "Préstamos", disc: "Descuentos", bmi: "IMC", cur: "Monedas"
+        },
+        de: {
+            bill: "Rechnungsbetrag:", tip: "Trinkgeld (%):", people: "Personen:",
+            tipTotal: "Trinkgeldbetrag:", totalPerson: "Pro Person:",
+            other: "Andere Tools", footer: "Trinkgeldrechner — schnell und fair.",
+            unit: "Konverter", perc: "Prozentrechner", vat: "MwSt-Rechner", 
+            loan: "Kreditrechner", disc: "Rabattrechner", bmi: "BMI-Rechner", cur: "Währungen"
         }
     };
 
@@ -115,7 +133,17 @@
         document.getElementById('lbl-people').innerText = t.people;
         document.getElementById('lbl-tip-total').innerText = t.tipTotal;
         document.getElementById('lbl-total-person').innerText = t.totalPerson;
-        document.getElementById('txt-footer').innerText = t.footer;
+        document.getElementById('txt-other').innerText = t.other;
+        document.getElementById('footer-text').innerText = t.footer;
+        
+        document.getElementById('lnk-unit').innerText = t.unit;
+        document.getElementById('lnk-perc').innerText = t.perc;
+        document.getElementById('lnk-vat').innerText = t.vat;
+        document.getElementById('lnk-loan').innerText = t.loan;
+        document.getElementById('lnk-disc').innerText = t.disc;
+        document.getElementById('lnk-bmi').innerText = t.bmi;
+        document.getElementById('lnk-cur').innerText = t.cur;
+
         calculate();
     }
 
@@ -128,8 +156,8 @@
         const totalBill = bill + totalTip;
         const perPerson = totalBill / (ppl > 0 ? ppl : 1);
 
-        document.getElementById('tipAmount').innerText = totalTip.toFixed(2);
-        document.getElementById('totalPerson').innerText = perPerson.toFixed(2);
+        document.getElementById('tipAmount').value = totalTip.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('totalPerson').value = perPerson.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
     updateUI();
