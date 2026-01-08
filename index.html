@@ -11,38 +11,43 @@
             --accent-green: #22c55e;
             --text-light: #f8fafc;
             --border-color: #334155;
-            --border-glow: rgba(255, 255, 255, 0.3);
+            --border-glow: rgba(255, 255, 255, 0.2);
         }
 
         body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; }
         
         .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
-        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 0.5px; color: white; }
-        
+        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
         .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 800; }
         
-        .container { max-width: 800px; margin: 0 auto; padding: 5px; box-sizing: border-box; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 5px; box-sizing: border-box; }
         
-        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin: 15px 0 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .ad-space { background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--border-color); margin: 10px 0; text-align: center; padding: 15px; color: #64748b; font-size: 11px; min-height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
         
+        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin-top: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .row { display: flex; align-items: center; margin-bottom: 18px; }
-        .row label { width: 150px; font-size: 17px; color: #cbd5e1; font-weight: 900; line-height: 1.2; padding-right: 10px; }
-        
-        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; width: 100%; box-sizing: border-box; height: 48px; background: #fff; color: #000; }
-        .result-field { background: #f0fdf4 !important; color: #166534 !important; border-color: #22c55e !important; }
+        .row label { width: 140px; font-size: 16px; color: #cbd5e1; font-weight: 700; }
+        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 19px; font-weight: 800; background: #fff; color: #000; outline: none; width: 100%; }
+        .res-field { background: #f0fdf4 !important; color: #166534 !important; border-color: #22c55e !important; }
 
-        /* Сітка з 7 кнопок: 3 ряди по 2, і 7-ма по центру */
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .tool-link { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--accent-green); padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 13px; font-weight: 800; transition: 0.3s; }
-        .tool-link:hover { background: var(--accent-green); color: white; }
-        .tool-link-wide { grid-column: span 2; } /* Сьома кнопка на весь рядок */
+        /* Сітка з 7 кнопок з центрованою останньою */
+        .tools-network { padding: 20px 15px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 20px; }
+        .tools-network h4 { margin: 0 0 15px 0; color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tool-link-btn { padding: 12px 5px; border: 1px solid var(--accent-green); color: var(--accent-green); text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 900; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .tool-link-btn:hover { background: var(--accent-green); color: white; }
+        .tool-link-btn:last-child:nth-child(odd) {
+            grid-column: 1 / span 2;
+            justify-self: center;
+            width: calc(50% - 5px);
+        }
 
         footer { border-top: 1px solid var(--border-color); padding: 25px 15px; text-align: center; font-size: 13px; color: #94a3b8; }
         .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.05); }
         .footer-link { color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 0 8px; font-weight: 900; }
-
+        
         .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 25px; width: 90%; max-width: 600px; border-radius: 12px; position: relative; color: var(--text-light); border: 2px solid var(--border-glow); line-height: 1.6; }
+        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 25px; width: 90%; max-width: 600px; border-radius: 12px; position: relative; border: 2px solid var(--border-glow); color: white; }
         .close-btn { position: absolute; right: 10px; top: 0; font-size: 38px; cursor: pointer; padding: 10px; }
     </style>
 </head>
@@ -59,56 +64,55 @@
 </div>
 
 <div class="container">
+    <div class="ad-space">ADVERTISEMENT AREA</div>
+    
     <div class="converter-box">
         <div class="row"><label id="lbl-bill">Bill Amount:</label><input type="number" id="bill" class="input-field" value="100" oninput="calculate()"></div>
         <div class="row"><label id="lbl-tip">Tip (%):</label><input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()"></div>
         <div class="row"><label id="lbl-people">People:</label><input type="number" id="people" class="input-field" value="1" oninput="calculate()"></div>
         
-        <div class="row" style="margin-top:25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-            <label id="lbl-tip-total" style="color: var(--accent-green);">Tip Amount:</label>
-            <input type="text" id="tipAmount" class="input-field result-field" readonly>
+        <div style="margin-top:25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <div class="row"><label id="lbl-tip-total">Tip Amount:</label><input type="text" id="tipAmount" class="input-field res-field" readonly></div>
+            <div class="row"><label id="lbl-total-person">Per Person:</label><input type="text" id="totalPerson" class="input-field res-field" readonly></div>
         </div>
-        <div class="row"><label id="lbl-total-person">Per Person:</label><input type="text" id="totalPerson" class="input-field result-field" readonly></div>
     </div>
 
-    <h3 style="text-align: center; font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 30px;" id="txt-other">Other Tools</h3>
-    <div class="tools-grid">
-        <a href="#" class="tool-link" id="lnk-unit">Unit Converter</a>
-        <a href="#" class="tool-link" id="lnk-perc">Percentage Calc</a>
-        <a href="#" class="tool-link" id="lnk-vat">VAT Calculator</a>
-        <a href="#" class="tool-link" id="lnk-loan">Loan Calculator</a>
-        <a href="#" class="tool-link" id="lnk-disc">Discount Calc</a>
-        <a href="#" class="tool-link" id="lnk-bmi">BMI Calculator</a>
-        <a href="#" class="tool-link tool-link-wide" id="lnk-cur">Currency Converter</a>
+    <div class="tools-network">
+        <h4 id="txt-other-tools">Other Elite Tools</h4>
+        <div class="tools-grid">
+            <a href="https://smart-converter.github.io/unit-converter/" class="tool-link-btn" id="lnk-unit">Unit Converter</a>
+            <a href="https://smart-converter.github.io/percentage-calculator/" class="tool-link-btn" id="lnk-perc">Percentage Calc</a>
+            <a href="https://smart-converter.github.io/vat-calculator/" class="tool-link-btn" id="lnk-vat">VAT Calculator</a>
+            <a href="https://smart-converter.github.io/loan-calculator/" class="tool-link-btn" id="lnk-loan">Loan Calculator</a>
+            <a href="https://smart-converter.github.io/discount-calculator/" class="tool-link-btn" id="lnk-disc">Discount Calc</a>
+            <a href="https://smart-converter.github.io/bmi-calculator/" class="tool-link-btn" id="lnk-bmi">BMI Calculator</a>
+            <a href="https://smart-converter.github.io/currency-converter/" class="tool-link-btn" id="lnk-cur">Currency Converter</a>
+        </div>
     </div>
 </div>
 
 <footer>
-    <div class="footer-info-block" id="footer-text"></div>
-    <p>© 2025 SmartFinance.io</p>
-    <div style="margin-top:10px;">
-        <span class="footer-link" onclick="openPol('privacy')" id="link-privacy">Privacy</span>
-        <span class="footer-link" onclick="openPol('terms')" id="link-terms">Terms</span>
+    <div class="footer-info-block" id="footer-full-text"></div>
+    <p>© 2026 SmartFinance.io</p>
+    <div>
+        <span class="footer-link" onclick="openPol('privacy')" id="link-privacy">Privacy Policy</span>
+        <span class="footer-link" onclick="openPol('terms')" id="link-terms">Terms of Use</span>
     </div>
 </footer>
 
 <div id="siteModal" class="modal" onclick="if(event.target == this) closeModal()">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">×</span>
-        <div id="modalBody"></div>
-    </div>
+    <div class="modal-content"><span class="close-btn" onclick="closeModal()">×</span><div id="modalBody"></div></div>
 </div>
 
 <script>
     const translations = {
         en: {
             bill: "Bill Amount:", tip: "Tip (%):", people: "People:", tipTotal: "Tip Amount:", totalPerson: "Per Person:",
-            other: "Other Tools", footer: "SmartFinance Tip Calculator — quick and fair way to split the bill.",
+            other: "Other Elite Tools", footer: "SmartFinance Tip Calculator — quick and fair way to split the bill.",
             unit: "Unit Converter", perc: "Percentage Calc", vat: "VAT Calculator", loan: "Loan Calculator", 
             disc: "Discount Calc", bmi: "BMI Calculator", cur: "Currency Converter",
             privacy: "Privacy Policy", terms: "Terms of Use",
-            privText: "<h2>Privacy</h2><p>We do not store your data. Calculations happen in your browser.</p>",
-            termsText: "<h2>Terms</h2><p>Results are for information purposes only.</p>"
+            privText: "<h2>Privacy</h2><p>Data stays on your device.</p>", termsText: "<h2>Terms</h2><p>For info only.</p>"
         },
         uk: {
             bill: "Сума чека:", tip: "Чайові (%):", people: "Людей:", tipTotal: "Сума чайових:", totalPerson: "З кожного:",
@@ -116,26 +120,23 @@
             unit: "Конвертер", perc: "Відсотки", vat: "Калькулятор ПДВ", loan: "Кредити", 
             disc: "Знижки", bmi: "Індекс маси тіла", cur: "Курси валют",
             privacy: "Конфіденційність", terms: "Умови",
-            privText: "<h2>Конфіденційність</h2><p>Ми не зберігаємо дані. Все працює локально.</p>",
-            termsText: "<h2>Умови</h2><p>Результати мають інформаційний характер.</p>"
+            privText: "<h2>Конфіденційність</h2><p>Ми не зберігаємо дані.</p>", termsText: "<h2>Умови</h2><p>Результати мають інформаційний характер.</p>"
         },
         es: {
             bill: "Monto:", tip: "Propina (%):", people: "Personas:", tipTotal: "Total propina:", totalPerson: "Por persona:",
-            other: "Otras herramientas", footer: "Calculadora de propinas: rápida y justa.",
+            other: "Otras herramientas", footer: "Calculadora de propinas SmartFinance: rápida y justa.",
             unit: "Convertidor", perc: "Porcentajes", vat: "IVA", loan: "Préstamos", 
             disc: "Descuento", bmi: "IMC", cur: "Moneda",
             privacy: "Privacidad", terms: "Términos",
-            privText: "<h2>Privacidad</h2><p>No guardamos datos.</p>",
-            termsText: "<h2>Términos</h2><p>Uso informativo.</p>"
+            privText: "<h2>Privacidad</h2><p>Los datos no se recopilan.</p>", termsText: "<h2>Términos</h2><p>Solo para información.</p>"
         },
         de: {
             bill: "Betrag:", tip: "Trinkgeld (%):", people: "Personen:", tipTotal: "Trinkgeld gesamt:", totalPerson: "Pro Person:",
-            other: "Andere Tools", footer: "Trinkgeldrechner — schnell und fair.",
+            other: "Andere Tools", footer: "Trinkgeldrechner von SmartFinance — schnell und fair.",
             unit: "Konverter", perc: "Prozente", vat: "MwSt", loan: "Kredit", 
             disc: "Rabatt", bmi: "BMI", cur: "Währung",
             privacy: "Datenschutz", terms: "AGB",
-            privText: "<h2>Datenschutz</h2><p>Keine Datenspeicherung.</p>",
-            termsText: "<h2>AGB</h2><p>Nur zur Information.</p>"
+            privText: "<h2>Datenschutz</h2><p>Keine Datenspeicherung.</p>", termsText: "<h2>AGB</h2><p>Nur zur Information.</p>"
         }
     };
 
@@ -148,15 +149,15 @@
     }
 
     function updateUI() {
-        const t = translations[curLang];
+        const t = translations[curLang] || translations.en;
         document.getElementById('langSelect').value = curLang;
         document.getElementById('lbl-bill').innerText = t.bill;
         document.getElementById('lbl-tip').innerText = t.tip;
         document.getElementById('lbl-people').innerText = t.people;
         document.getElementById('lbl-tip-total').innerText = t.tipTotal;
         document.getElementById('lbl-total-person').innerText = t.totalPerson;
-        document.getElementById('txt-other').innerText = t.other;
-        document.getElementById('footer-text').innerText = t.footer;
+        document.getElementById('txt-other-tools').innerText = t.other;
+        document.getElementById('footer-full-text').innerText = t.footer;
         document.getElementById('link-privacy').innerText = t.privacy;
         document.getElementById('link-terms').innerText = t.terms;
         
@@ -181,11 +182,13 @@
     }
 
     function openPol(type) {
-        const t = translations[curLang];
+        const t = translations[curLang] || translations.en;
         document.getElementById('modalBody').innerHTML = type === 'privacy' ? t.privText : t.termsText;
         document.getElementById('siteModal').style.display = 'block';
     }
+
     function closeModal() { document.getElementById('siteModal').style.display = 'none'; }
+    
     updateUI();
 </script>
 </body>
