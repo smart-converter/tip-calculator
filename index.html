@@ -3,140 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tip Calculator - SmartFinance</title>
+    <title>Tip Calculator - Split Bills Easily | SmartFinance</title>
+    <meta id="meta-desc" name="description" content="Calculate tips and split bills instantly with our free Tip Calculator. Perfect for restaurants, bars, and group dining. High precision and multi-language support.">
     <style>
         :root {
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
-            --accent-green: #22c55e;
+            --accent-green: #4ade80; /* Оптимальний контраст для 100% Accessibility */
             --text-light: #f8fafc;
+            --text-muted: #cbd5e1;
             --border-color: #334155;
             --border-glow: rgba(255, 255, 255, 0.2);
         }
 
-        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; }
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         
         .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
         .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
-        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 800; }
+        
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 800; outline: none; min-height: 44px; }
+        .lang-switcher option { color: #000; background: #fff; }
         
         .container { max-width: 800px; margin: 0 auto; padding: 5px; box-sizing: border-box; }
         
-        .ad-space { background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--border-color); margin: 10px 0; text-align: center; padding: 15px; color: #64748b; font-size: 11px; min-height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .ad-space { background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--border-color); margin: 10px 0; text-align: center; padding: 15px; color: var(--text-muted); font-size: 11px; height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 8px; box-sizing: border-box; }
         
-        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin-top: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-top: 10px; }
         .row { display: flex; align-items: center; margin-bottom: 18px; }
         .row label { width: 140px; font-size: 16px; color: #cbd5e1; font-weight: 700; }
-        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 19px; font-weight: 800; background: #fff; color: #000; outline: none; width: 100%; }
-        .res-field { background: #f0fdf4 !important; color: #166534 !important; border-color: #22c55e !important; }
-
-        /* Сітка з 7 кнопок з центрованою останньою */
-        .tools-network { padding: 20px 15px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 20px; }
-        .tools-network h4 { margin: 0 0 15px 0; color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .tool-link-btn { padding: 12px 5px; border: 1px solid var(--accent-green); color: var(--accent-green); text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 900; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .tool-link-btn:hover { background: var(--accent-green); color: white; }
-        .tool-link-btn:last-child:nth-child(odd) {
-            grid-column: 1 / span 2;
-            justify-self: center;
-            width: calc(50% - 5px);
-        }
-
-        footer { border-top: 1px solid var(--border-color); padding: 25px 15px; text-align: center; font-size: 13px; color: #94a3b8; }
-        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.05); }
-        .footer-link { color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 0 8px; font-weight: 900; }
+        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 19px; font-weight: 800; background: #fff; color: #000; outline: none; width: 100%; box-sizing: border-box; height: 48px; }
+        .res-field { background: #f0fdf4 !important; color: #166534 !important; border-color: var(--accent-green) !important; font-weight: 900; }
         
-        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 25px; width: 90%; max-width: 600px; border-radius: 12px; position: relative; border: 2px solid var(--border-glow); color: white; }
-        .close-btn { position: absolute; right: 10px; top: 0; font-size: 38px; cursor: pointer; padding: 10px; }
+        .seo-content { padding: 15px; line-height: 1.7; font-size: 14px; color: var(--text-muted); }
+        .seo-content h2 { color: var(--accent-green); font-size: 19px; margin: 20px 0 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 900; }
+
+        .tools-network { padding: 20px 15px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 20px; }
+        .tools-network h2 { margin: 0 0 15px 0; color: #94a3b8; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tool-link-btn { padding: 12px 5px; border: 2px solid var(--accent-green); color: var(--accent-green); text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; height: 48px; box-sizing: border-box; }
+        .tool-link-btn:last-child:nth-child(odd) { grid-column: 1 / span 2; justify-self: center; width: calc(50% - 5px); }
+
+        footer { border-top: 1px solid var(--border-color); padding: 30px 15px; text-align: center; font-size: 13px; color: var(--text-muted); box-sizing: border-box; width: 100%; }
+        .footer-info-block { 
+            border: 2px solid var(--border-glow); 
+            border-radius: 12px; 
+            padding: 18px; 
+            margin: 0 auto 20px auto; 
+            background: rgba(255, 255, 255, 0.05); 
+            text-align: left; 
+            max-width: calc(100% - 20px); 
+            width: 480px; 
+            box-sizing: border-box; 
+            line-height: 1.6; 
+        }
+        .footer-btn { background: none; border: none; color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 10px; font-weight: 900; font-family: inherit; font-size: 13px; min-height: 44px; }
+        
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
+        .modal-content { background: var(--card-bg); margin: 10% auto; padding: 35px 25px 25px; width: 85%; max-width: 600px; border-radius: 12px; position: relative; border: 2px solid var(--border-glow); color: white; line-height: 1.6; }
+        .close-btn { position: absolute; right: 5px; top: 5px; font-size: 40px; cursor: pointer; padding: 10px 20px; background: none; border: none; color: var(--text-muted); font-weight: 300; min-height: 44px; }
     </style>
 </head>
 <body>
 
-<div class="top-header">
+<header class="top-header">
     <h1>SmartFinance.io</h1>
-    <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect">
-        <option value="en">English</option>
-        <option value="uk">Українська</option>
-        <option value="es">Español</option>
-        <option value="de">Deutsch</option>
-    </select>
-</div>
+    <div>
+        <label for="langSelect" class="sr-only">Choose Language</label>
+        <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect">
+            <option value="en">English</option>
+            <option value="uk">Українська</option>
+            <option value="es">Español</option>
+            <option value="de">Deutsch</option>
+        </select>
+    </div>
+</header>
 
-<div class="container">
-    <div class="ad-space">ADVERTISEMENT AREA</div>
+<main class="container">
+    <div class="ad-space" role="complementary">ADVERTISEMENT AREA</div>
     
     <div class="converter-box">
-        <div class="row"><label id="lbl-bill">Bill Amount:</label><input type="number" id="bill" class="input-field" value="100" oninput="calculate()"></div>
-        <div class="row"><label id="lbl-tip">Tip (%):</label><input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()"></div>
-        <div class="row"><label id="lbl-people">People:</label><input type="number" id="people" class="input-field" value="1" oninput="calculate()"></div>
+        <div class="row"><label id="lbl-bill" for="bill">Bill Amount:</label><input type="number" id="bill" class="input-field" value="100" oninput="calculate()" aria-required="true"></div>
+        <div class="row"><label id="lbl-tip" for="tipPerc">Tip (%):</label><input type="number" id="tipPerc" class="input-field" value="10" oninput="calculate()" aria-required="true"></div>
+        <div class="row"><label id="lbl-people" for="people">People:</label><input type="number" id="people" class="input-field" value="1" oninput="calculate()" aria-required="true"></div>
         
         <div style="margin-top:25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-            <div class="row"><label id="lbl-tip-total">Tip Amount:</label><input type="text" id="tipAmount" class="input-field res-field" readonly></div>
-            <div class="row"><label id="lbl-total-person">Per Person:</label><input type="text" id="totalPerson" class="input-field res-field" readonly></div>
+            <div class="row"><label id="lbl-tip-total" for="tipAmount">Tip Total:</label><input type="text" id="tipAmount" class="input-field res-field" readonly aria-live="polite"></div>
+            <div class="row"><label id="lbl-total-person" for="totalPerson">Per Person:</label><input type="text" id="totalPerson" class="input-field res-field" readonly aria-live="polite"></div>
         </div>
     </div>
 
-    <div class="tools-network">
-        <h4 id="txt-other-tools">Other Elite Tools</h4>
+    <section class="seo-content" id="seo-box"></section>
+
+    <section class="tools-network">
+        <h2 id="txt-other-tools">Other Elite Tools</h2>
         <div class="tools-grid">
             <a href="https://smart-converter.github.io/unit-converter/" class="tool-link-btn" id="lnk-unit">Unit Converter</a>
-            <a href="https://smart-converter.github.io/percentage-calculator/" class="tool-link-btn" id="lnk-perc">Percentage Calc</a>
-            <a href="https://smart-converter.github.io/vat-calculator/" class="tool-link-btn" id="lnk-vat">VAT Calculator</a>
-            <a href="https://smart-converter.github.io/loan-calculator/" class="tool-link-btn" id="lnk-loan">Loan Calculator</a>
-            <a href="https://smart-converter.github.io/discount-calculator/" class="tool-link-btn" id="lnk-disc">Discount Calc</a>
-            <a href="https://smart-converter.github.io/bmi-calculator/" class="tool-link-btn" id="lnk-bmi">BMI Calculator</a>
-            <a href="https://smart-converter.github.io/currency-converter/" class="tool-link-btn" id="lnk-cur">Currency Converter</a>
+            <a href="https://smart-converter.github.io/percentage-calculator/" class="tool-link-btn" id="lnk-perc">Percentage</a>
+            <a href="https://smart-converter.github.io/vat-calculator/" class="tool-link-btn" id="lnk-vat">VAT</a>
+            <a href="https://smart-converter.github.io/loan-calculator/" class="tool-link-btn" id="lnk-loan">Loan</a>
+            <a href="https://smart-converter.github.io/discount-calculator/" class="tool-link-btn" id="lnk-disc">Discount</a>
+            <a href="https://smart-converter.github.io/bmi-calculator/" class="tool-link-btn" id="lnk-bmi">BMI</a>
+            <a href="https://smart-converter.github.io/currency-converter/" class="tool-link-btn" id="lnk-cur">Currency</a>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
 <footer>
     <div class="footer-info-block" id="footer-full-text"></div>
-    <p>© 2026 SmartFinance.io</p>
-    <div>
-        <span class="footer-link" onclick="openPol('privacy')" id="link-privacy">Privacy Policy</span>
-        <span class="footer-link" onclick="openPol('terms')" id="link-terms">Terms of Use</span>
-    </div>
+    <p>© 2026 SmartFinance.io - Precise Calculation Tools</p>
+    <nav aria-label="Legal links">
+        <button class="footer-btn" onclick="openPol('privacy')" id="link-privacy">Privacy Policy</button>
+        <button class="footer-btn" onclick="openPol('terms')" id="link-terms">Terms of Use</button>
+    </nav>
 </footer>
 
-<div id="siteModal" class="modal" onclick="if(event.target == this) closeModal()">
-    <div class="modal-content"><span class="close-btn" onclick="closeModal()">×</span><div id="modalBody"></div></div>
+<div id="siteModal" class="modal" onclick="if(event.target == this) closeModal()" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()" aria-label="Close modal">×</button>
+        <div id="modalBody"></div>
+    </div>
 </div>
 
 <script>
     const translations = {
         en: {
-            bill: "Bill Amount:", tip: "Tip (%):", people: "People:", tipTotal: "Tip Amount:", totalPerson: "Per Person:",
-            other: "Other Elite Tools", footer: "SmartFinance Tip Calculator — quick and fair way to split the bill.",
-            unit: "Unit Converter", perc: "Percentage Calc", vat: "VAT Calculator", loan: "Loan Calculator", 
-            disc: "Discount Calc", bmi: "BMI Calculator", cur: "Currency Converter",
-            privacy: "Privacy Policy", terms: "Terms of Use",
-            privText: "<h2>Privacy</h2><p>Data stays on your device.</p>", termsText: "<h2>Terms</h2><p>For info only.</p>"
+            desc: "Smart Finance Tip Calculator - easily split bills and calculate tips for restaurants and groups.",
+            bill: "Bill Amount:", tip: "Tip (%):", people: "People:", tipTotal: "Tip Total:", totalPerson: "Per Person:",
+            other: "Other Elite Tools", privacy: "Privacy Policy", terms: "Terms of Use",
+            unit: "Unit Converter", perc: "Percentage", vat: "VAT", loan: "Loan", disc: "Discount", bmi: "BMI", cur: "Currency",
+            footer: "SmartFinance.io Tip Calculator is your reliable companion for social dining. Whether you're sharing a meal with friends or handling a business dinner, our tool ensures everyone pays their fair share accurately. We help you calculate percentages instantly so you can focus on the conversation, not the math.",
+            seo: `<h2>Fast Tip Calculation</h2><p>Never struggle with bill math again. Our tool allows you to input your bill amount and instantly see the total tip based on percentage.</p><h2>Perfect for Groups</h2><p>Split the final cost among any number of people. It calculates exactly what each individual owes, including their share of the tip.</p>`,
+            privText: "<h2>Privacy Policy</h2><p>All calculations happen in your browser. No data is stored or transmitted.</p>", 
+            termsText: "<h2>Terms of Use</h2><p>This tool is for educational purposes. Always verify the final bill provided by the establishment.</p>"
         },
         uk: {
-            bill: "Сума чека:", tip: "Чайові (%):", people: "Людей:", tipTotal: "Сума чайових:", totalPerson: "З кожного:",
-            other: "Інші інструменти", footer: "SmartFinance — швидкий та чесний розрахунок чайових.",
-            unit: "Конвертер", perc: "Відсотки", vat: "Калькулятор ПДВ", loan: "Кредити", 
-            disc: "Знижки", bmi: "Індекс маси тіла", cur: "Курси валют",
-            privacy: "Конфіденційність", terms: "Умови",
-            privText: "<h2>Конфіденційність</h2><p>Ми не зберігаємо дані.</p>", termsText: "<h2>Умови</h2><p>Результати мають інформаційний характер.</p>"
+            desc: "Калькулятор чайових Smart Finance - зручний спосіб розділити рахунок та розрахувати чайові для компанії.",
+            bill: "Сума чека:", tip: "Чайові (%):", people: "Людей:", tipTotal: "Усі чайові:", totalPerson: "З кожного:",
+            other: "Інші професійні інструменти", privacy: "Конфіденційність", terms: "Умови",
+            unit: "Конвертер", perc: "Відсотки", vat: "ПДВ", loan: "Кредити", disc: "Знижки", bmi: "BMI", cur: "Валюти",
+            footer: "Калькулятор чайових від SmartFinance.io — ваш надійний помічник під час відвідування ресторанів та кафе. Незалежно від того, чи це дружня вечеря, чи ділова зустріч, наш інструмент забезпечує чесний розподіл витрат між усіма учасниками. Ми допомагаємо миттєво порахувати відсотки, щоб ви могли насолоджуватися спілкуванням.",
+            seo: `<h2>Швидкий розрахунок чайових</h2><p>Більше ніяких складних обчислень у голові. Просто введіть суму чека та відсоток, який хочете залишити, а ми зробимо все інше.</p><h2>Ідеально для компаній</h2><p>Розділіть фінальну суму на будь-яку кількість людей. Калькулятор покаже частку кожного з урахуванням чайових.</p>`,
+            privText: "<h2>Конфіденційність</h2><p>Усі розрахунки відбуваються локально у вашому браузері. Ми не збираємо ваші дані.</p>", 
+            termsText: "<h2>Умови використання</h2><p>Інструмент надається для ознайомлення. Завжди перевіряйте фінальний рахунок, наданий закладом.</p>"
         },
         es: {
-            bill: "Monto:", tip: "Propina (%):", people: "Personas:", tipTotal: "Total propina:", totalPerson: "Por persona:",
-            other: "Otras herramientas", footer: "Calculadora de propinas SmartFinance: rápida y justa.",
-            unit: "Convertidor", perc: "Porcentajes", vat: "IVA", loan: "Préstamos", 
-            disc: "Descuento", bmi: "IMC", cur: "Moneda",
-            privacy: "Privacidad", terms: "Términos",
-            privText: "<h2>Privacidad</h2><p>Los datos no se recopilan.</p>", termsText: "<h2>Términos</h2><p>Solo para información.</p>"
+            desc: "Calculadora de propinas Smart Finance: divida cuentas y calcule propinas fácilmente para grupos.",
+            bill: "Monto:", tip: "Propina (%):", people: "Personas:", tipTotal: "Propina total:", totalPerson: "Por persona:",
+            other: "Otras herramientas de élite", privacy: "Privacidad", terms: "Términos",
+            unit: "Unidades", perc: "Porcentaje", vat: "IVA", loan: "Préstamo", disc: "Descuento", bmi: "BMI", cur: "Moneda",
+            footer: "SmartFinance.io es su destino principal para la planificación financiera. Nuestra calculadora de propinas le ayuda a dividir cuentas de forma justa y rápida en cualquier situación social.",
+            seo: `<h2>Cálculo de Propinas Rápido</h2><p>No vuelva a tener problemas con las matemáticas al final de la cena. Nuestra herramienta desglosa la propina y el total por persona en segundos.</p><h2>Ideal para Grupos</h2><p>Divida el costo final entre cualquier número de personas con precisión matemática.</p>`,
+            privText: "<h2>Privacidad</h2><p>Sus datos financieros nunca salen de su dispositivo. Los cálculos se realizan localmente.</p>", 
+            termsText: "<h2>Términos</h2><p>Estas calculadoras son informativas. Verifique siempre con el ticket del restaurante.</p>"
         },
         de: {
+            desc: "Smart Finance Trinkgeldrechner - Rechnungen einfach teilen und Trinkgelder für Gruppen berechnen.",
             bill: "Betrag:", tip: "Trinkgeld (%):", people: "Personen:", tipTotal: "Trinkgeld gesamt:", totalPerson: "Pro Person:",
-            other: "Andere Tools", footer: "Trinkgeldrechner von SmartFinance — schnell und fair.",
-            unit: "Konverter", perc: "Prozente", vat: "MwSt", loan: "Kredit", 
-            disc: "Rabatt", bmi: "BMI", cur: "Währung",
-            privacy: "Datenschutz", terms: "AGB",
-            privText: "<h2>Datenschutz</h2><p>Keine Datenspeicherung.</p>", termsText: "<h2>AGB</h2><p>Nur zur Information.</p>"
+            other: "Andere Elite-Tools", privacy: "Datenschutz", terms: "AGB",
+            unit: "Einheiten", perc: "Prozent", vat: "MwSt", loan: "Kredit", disc: "Rabatt", bmi: "BMI", cur: "Währung",
+            footer: "SmartFinance.io Trinkgeldrechner ist Ihr zuverlässiger Begleiter im Restaurant. Wir sorgen dafür, dass jeder seinen fairen Anteil korrekt bezahlt.",
+            seo: `<h2>Schnelle Trinkgeldberechnung</h2><p>Nie wieder Schwierigkeiten beim Teilen der Rechnung. Geben Sie den Betrag ein und sehen Sie sofort das Ergebnis.</p><h2>Perfekt für Gruppen</h2><p>Teilen Sie die Gesamtkosten auf eine beliebige Anzahl von Personen auf.</p>`,
+            privText: "<h2>Datenschutz</h2><p>Ihre Berechnungen bleiben privat. Keine Daten werden online gespeichert.</p>", 
+            termsText: "<h2>Nutzungsbedingungen</h2><p>Dieses Tool dient nur zur Information. Überprüfen Sie immer die offizielle Rechnung.</p>"
         }
     };
 
@@ -149,25 +179,24 @@
     }
 
     function updateUI() {
-        const t = translations[curLang] || translations.en;
+        const l = translations[curLang] || translations.en;
+        document.documentElement.lang = curLang;
+        document.getElementById('meta-desc').content = l.desc;
         document.getElementById('langSelect').value = curLang;
-        document.getElementById('lbl-bill').innerText = t.bill;
-        document.getElementById('lbl-tip').innerText = t.tip;
-        document.getElementById('lbl-people').innerText = t.people;
-        document.getElementById('lbl-tip-total').innerText = t.tipTotal;
-        document.getElementById('lbl-total-person').innerText = t.totalPerson;
-        document.getElementById('txt-other-tools').innerText = t.other;
-        document.getElementById('footer-full-text').innerText = t.footer;
-        document.getElementById('link-privacy').innerText = t.privacy;
-        document.getElementById('link-terms').innerText = t.terms;
+        document.getElementById('lbl-bill').innerText = l.bill;
+        document.getElementById('lbl-tip').innerText = l.tip;
+        document.getElementById('lbl-people').innerText = l.people;
+        document.getElementById('lbl-tip-total').innerText = l.tipTotal;
+        document.getElementById('lbl-total-person').innerText = l.totalPerson;
+        document.getElementById('txt-other-tools').innerText = l.other;
+        document.getElementById('footer-full-text').innerText = l.footer;
+        document.getElementById('link-privacy').innerText = l.privacy;
+        document.getElementById('link-terms').innerText = l.terms;
+        document.getElementById('seo-box').innerHTML = l.seo;
         
-        document.getElementById('lnk-unit').innerText = t.unit;
-        document.getElementById('lnk-perc').innerText = t.perc;
-        document.getElementById('lnk-vat').innerText = t.vat;
-        document.getElementById('lnk-loan').innerText = t.loan;
-        document.getElementById('lnk-disc').innerText = t.disc;
-        document.getElementById('lnk-bmi').innerText = t.bmi;
-        document.getElementById('lnk-cur').innerText = t.cur;
+        const toolIds = ['unit', 'perc', 'vat', 'loan', 'disc', 'bmi', 'cur'];
+        toolIds.forEach(id => document.getElementById('lnk-' + id).innerText = l[id]);
+        
         calculate();
     }
 
@@ -175,19 +204,27 @@
         const bill = parseFloat(document.getElementById('bill').value) || 0;
         const tipP = parseFloat(document.getElementById('tipPerc').value) || 0;
         const ppl = parseInt(document.getElementById('people').value) || 1;
+        
         const totalTip = bill * (tipP / 100);
         const perPerson = (bill + totalTip) / (ppl > 0 ? ppl : 1);
+        
         document.getElementById('tipAmount').value = totalTip.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.getElementById('totalPerson').value = perPerson.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
     function openPol(type) {
-        const t = translations[curLang] || translations.en;
-        document.getElementById('modalBody').innerHTML = type === 'privacy' ? t.privText : t.termsText;
-        document.getElementById('siteModal').style.display = 'block';
+        const l = translations[curLang] || translations.en;
+        document.getElementById('modalBody').innerHTML = type === 'privacy' ? l.privText : l.termsText;
+        const modal = document.getElementById('siteModal');
+        modal.style.display = 'block';
+        modal.setAttribute('aria-hidden', 'false');
     }
 
-    function closeModal() { document.getElementById('siteModal').style.display = 'none'; }
+    function closeModal() { 
+        const modal = document.getElementById('siteModal');
+        modal.style.display = 'none'; 
+        modal.setAttribute('aria-hidden', 'true');
+    }
     
     updateUI();
 </script>
